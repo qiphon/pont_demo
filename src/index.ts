@@ -15,3 +15,5 @@ API.pet.getPetById
   });
 
 API.pet.addPet.request({}, pet);
+
+console.log(123)
