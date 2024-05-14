@@ -2,6 +2,17 @@ import { CodeGenerator, Interface } from 'pont-engine';
 
 export default class MyGenerator extends CodeGenerator {
   // custom your generator here
+  // private getInterfaceInDeclaration(inter: Interface) {
+  //   return `
+  //     /**
+  //       * ${inter.description}
+  //       * ${inter.path}
+  //       */
+  //     export namespace ${inter.name} {
+  //       ${this.getInterfaceContentInDeclaration(inter)}
+  //     }
+  //   `;
+  // }
   /** 获取接口实现内容的代码 */
   getInterfaceContent(inter: Interface) {
     const bodyParmas = inter.getBodyParamsCode();
@@ -18,44 +29,27 @@ export default class MyGenerator extends CodeGenerator {
     export ${inter.getParamsCode()}
     export const init = ${inter.response.initialValue};
 
-    export async function request(${requestParams}) {
+    export async function request(${requestParams}):Promise<${inter.responseType}> {
       return pontFetch({
         url: '${inter.path}',
         ${bodyParmas ? 'params: bodyParams' : 'params'},
         method: '${inter.method}',
       });
-    }
+    } 
    `;
   }
 
 
   /** 获取所有模块的 index 入口文件 */
   getModsIndex() {
-    let conclusion = `
-      declare var window;
-
-      window.API = {
-        ${this.dataSource.mods.map(mod => mod.name).join(', \n')}
-      };
-    `;
-
-    // dataSource name means multiple dataSource
-    if (this.dataSource.name) {
-      conclusion = `
-        export const ${this.dataSource.name} = {
-          ${this.dataSource.mods.map(mod => mod.name).join(', \n')}
-        };
-      `;
-    }
 
     return `
       ${this.dataSource.mods
         .map(mod => {
-          return `import * as ${mod.name} from './${mod.name}';`;
+          return `export * from './${mod.name}';`;
         })
         .join('\n')}
 
-      ${conclusion}
     `;
   }
 }

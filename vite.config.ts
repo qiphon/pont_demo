@@ -17,7 +17,7 @@ export default defineConfig({
     ]
   },
   build: {
-    target: 'ES2015',
+    target: 'ESnext',
     outDir: 'build',
     minify:false
   }

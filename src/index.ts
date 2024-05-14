@@ -1,12 +1,9 @@
-import './services/';
+import { addPet, getPetById } from "./services/mods";
 
-// defs 包含所有公共类型
-const pet = new defs.Pet();
 
-pet.status;
 
 // API 包含所有接口
-API.pet.getPetById
+getPetById
   .request({
     petId: 3
   })
@@ -14,6 +11,6 @@ API.pet.getPetById
     console.log(p.name);
   });
 
-API.pet.addPet.request({}, pet);
+addPet.request({}, []);
 
 console.log(123)
